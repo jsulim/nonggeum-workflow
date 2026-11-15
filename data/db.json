@@ -1,0 +1,230 @@
+{
+  "users": [
+    {
+      "id": "u_admin",
+      "name": "민지 관리자",
+      "email": "admin@nonggeum.local",
+      "password": "admin123",
+      "role": "admin"
+    },
+    {
+      "id": "u_suhyun",
+      "name": "김수현",
+      "email": "suhyun@nonggeum.local",
+      "password": "consult123",
+      "role": "consultant",
+      "region": "수도권"
+    },
+    {
+      "id": "u_doyoon",
+      "name": "이도윤",
+      "email": "doyoon@nonggeum.local",
+      "password": "consult123",
+      "role": "consultant",
+      "region": "충청·강원"
+    }
+  ],
+  "companies": [
+    {
+      "id": "c1",
+      "name": "에버팜",
+      "businessNo": "121-88-09384",
+      "status": "컨설팅 진행",
+      "tag": "일반",
+      "address": "경기 성남시 분당구",
+      "addressConfirmed": true,
+      "consultantId": "u_suhyun",
+      "nextVisit": "2026-10-29",
+      "notes": "IR 자료에 경쟁사 비교 슬라이드 보완 요청.",
+      "rounds": [
+        {
+          "no": 1,
+          "date": "2026-10-23",
+          "report": {
+            "name": "1회차_컨설팅보고서.pdf",
+            "at": "2026-10-23"
+          }
+        }
+      ],
+      "files": [
+        {
+          "kind": "IR 원본",
+          "name": "everfarm_ir_deck.pptx",
+          "at": "2026-10-21"
+        }
+      ]
+    },
+    {
+      "id": "c2",
+      "name": "주식회사 소담",
+      "businessNo": "303-81-44321",
+      "status": "배정 대기",
+      "tag": "일반",
+      "address": "서울 성동구",
+      "addressConfirmed": false,
+      "consultantId": null,
+      "nextVisit": null,
+      "notes": "",
+      "rounds": [],
+      "files": []
+    },
+    {
+      "id": "c3",
+      "name": "로컬밸리",
+      "businessNo": "104-86-22341",
+      "status": "IR 준비",
+      "tag": "IR 직행",
+      "address": "강원 춘천시",
+      "addressConfirmed": true,
+      "consultantId": "u_doyoon",
+      "nextVisit": "2026-10-30",
+      "notes": "IR 발표 일정 조율 중",
+      "rounds": [
+        {
+          "no": 1,
+          "date": "2026-10-20",
+          "report": {
+            "name": "컨설팅_1회차.pdf",
+            "at": "2026-10-21"
+          }
+        }
+      ],
+      "files": [
+        {
+          "kind": "사수래 AI 분석본",
+          "name": "sasurae-analysis.pdf",
+          "at": "2026-10-22"
+        }
+      ]
+    },
+    {
+      "id": "c4",
+      "name": "우리밀 연구소",
+      "businessNo": "518-82-10012",
+      "status": "컨설팅 진행",
+      "tag": "일반",
+      "address": "경기 용인시",
+      "addressConfirmed": true,
+      "consultantId": "u_suhyun",
+      "nextVisit": "2026-10-29",
+      "notes": "",
+      "rounds": [],
+      "files": []
+    },
+    {
+      "id": "c5",
+      "name": "남해바다식품",
+      "businessNo": "612-86-78123",
+      "status": "IR 완료",
+      "tag": "일반",
+      "address": "경남 통영시",
+      "addressConfirmed": true,
+      "consultantId": "u_doyoon",
+      "nextVisit": null,
+      "notes": "",
+      "rounds": [
+        {
+          "no": 1,
+          "date": "2026-10-14",
+          "report": {
+            "name": "1회차.pdf",
+            "at": "2026-10-15"
+          }
+        },
+        {
+          "no": 2,
+          "date": "2026-10-24",
+          "report": {
+            "name": "2회차.pdf",
+            "at": "2026-10-24"
+          }
+        }
+      ],
+      "files": []
+    }
+  ],
+  "notifications": [
+    {
+      "id": "7774ce44-9c90-4959-939a-78699498af86",
+      "userId": "u_suhyun",
+      "text": "????? ?? 기업이 배정되었습니다.",
+      "read": false,
+      "at": "2026-10-26T07:36:07.200Z"
+    },
+    {
+      "id": "36de1fbb-be4a-4db3-bd7e-85111b346892",
+      "userId": "u_admin",
+      "text": "????? ?? 기업이 등록되었습니다.",
+      "read": false,
+      "at": "2026-10-26T07:36:07.194Z"
+    },
+    {
+      "id": "n1",
+      "userId": "u_suhyun",
+      "text": "에버팜 2회차 컨설팅 일정이 등록되었습니다.",
+      "read": false,
+      "at": "2026-10-26T01:00:00Z"
+    },
+    {
+      "id": "n2",
+      "userId": "u_admin",
+      "text": "주식회사 소담이 배정 대기 상태입니다.",
+      "read": false,
+      "at": "2026-10-26T01:00:00Z"
+    }
+  ],
+  "reviews": [
+    {
+      "companyId": "c1",
+      "text": "시장 확장성은 높으나 초기 고객 확보 전략 보완이 필요합니다. 후속 미팅을 희망합니다.",
+      "score": 82,
+      "interested": 3,
+      "followup": 2
+    }
+  ],
+  "settlements": [
+    {
+      "id": "s1",
+      "companyId": "c1",
+      "round": 1,
+      "region": "수도권",
+      "consultantFee": 150000,
+      "reportFee": 420000,
+      "confirmed": true,
+      "sheetStatus": "입력 완료"
+    },
+    {
+      "id": "s2",
+      "companyId": "c5",
+      "round": 2,
+      "region": "비수도권",
+      "consultantFee": 250000,
+      "reportFee": 420000,
+      "confirmed": true,
+      "sheetStatus": "입력 대기"
+    }
+  ],
+  "audit": [
+    {
+      "id": "69a92dbc-22df-4a3a-9291-2925cd3bad20",
+      "at": "2026-10-26T08:17:40.982Z",
+      "userId": "u_admin",
+      "action": "xlsx 일괄 등록",
+      "target": "1건"
+    },
+    {
+      "id": "263a4335-77af-4339-a2c3-46b86db9c889",
+      "at": "2026-10-26T07:36:24.725Z",
+      "userId": "u_admin",
+      "action": "정산 확인",
+      "target": "s2"
+    },
+    {
+      "id": "d7bf9827-cb1d-4ccf-a708-bbe26f216b9c",
+      "at": "2026-10-26T07:36:24.720Z",
+      "userId": "u_suhyun",
+      "action": "자료 업로드",
+      "target": "c1"
+    }
+  ]
+}

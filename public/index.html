@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>농금원 투자전 지원사업 운영</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx-populate/1.21.0/xlsx-populate.min.js"></script>
+<style>
+:root{--p:#2d7846;--p-dark:#235f37;--p-soft:#e7f2ea;--lime:#7bb93c;--blue:#0058a8;--sky:#00aae5;--bg:#f3f7f4;--line:#dce7df;--ink:#17241b;--muted:#5f6e64;--ok:#23875a;--ok-bg:#e2f4ea;--warn:#a4670f;--warn-bg:#fcefd9;--bad:#c0392f;--bad-bg:#fbe6e3;--info:#0058a8;--info-bg:#e3eef9}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Pretendard Variable',Pretendard,system-ui,-apple-system,'Noto Sans KR',sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:not-allowed;opacity:.55}
+.hidden{display:none!important}
+
+/* 상단바 */
+.topbar{background:var(--p);border-bottom:4px solid var(--lime);color:#fff;position:sticky;top:0;z-index:20}
+.topbar-in{max-width:1180px;margin:auto;padding:0 20px;height:60px;display:flex;align-items:center;gap:28px}
+.brand{font-weight:800;font-size:16px;white-space:nowrap}
+.brand small{font-weight:600;opacity:.75;margin-left:8px;font-size:13px}
+#nav{display:flex;gap:4px;flex:1;overflow-x:auto;scrollbar-width:none}
+#nav button{background:none;border:0;color:#fff;opacity:.85;padding:8px 14px;border-radius:8px;font-weight:600;white-space:nowrap}
+#nav button:hover{opacity:1;background:#ffffff1a}
+#nav button.on{opacity:1;background:#ffffff2e}
+.me{display:flex;align-items:center;gap:14px;font-size:13px;white-space:nowrap}
+.me span{opacity:.85}
+.me button{background:none;border:0;color:#fff;font-weight:600;padding:6px 0;opacity:.85}
+.me button:hover{opacity:1;text-decoration:underline}
+
+.wrap{max-width:1180px;margin:auto;padding:28px 20px 60px}
+
+/* 페이지 머리 */
+.head{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:6px 0 18px}
+.pill{display:inline-block;background:var(--p);color:#fff;border-radius:999px;padding:6px 16px;font-weight:700;font-size:14px}
+.head h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.02em}
+
+/* 단계 표시 */
+.stepper{list-style:none;margin:0 0 24px;padding:0;display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.stepper li{flex:1;min-width:120px}
+.stepper button{width:100%;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px 12px;font-weight:600;color:var(--muted);text-align:left}
+.stepper .num{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--p-soft);color:var(--p);font-size:13px;font-weight:800}
+.stepper li.done .num{background:var(--lime);color:#fff}
+.stepper li.on button{border-color:var(--p);color:var(--ink);box-shadow:0 0 0 1px var(--p) inset}
+.stepper li.on .num{background:var(--p);color:#fff}
+
+/* 안내 목록 */
+.guide{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}
+.guide li{display:flex;align-items:center;gap:12px;font-weight:600}
+.guide .num{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--p);color:var(--p);display:grid;place-items:center;font-size:13px;font-weight:800}
+
+.callout{background:var(--p-soft);border-radius:12px;padding:14px 18px;margin:0 0 18px;color:#1f4d2e}
+.callout.warn{background:var(--warn-bg);color:#6d4508}
+.callout.bad{background:var(--bad-bg);color:#8f2a22}
+
+.card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:22px;margin:0 0 16px}
+.card h2,.sec{margin:0 0 14px;font-size:17px;font-weight:800}
+.sec{margin:26px 0 12px}
+.card-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.card-head h2{margin:0}
+
+/* 폼 */
+.form{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px 14px;align-items:end}
+.f{display:grid;gap:5px;font-size:13px;font-weight:600;color:var(--muted)}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);font-size:15px}
+input:focus,select:focus,textarea:focus{outline:2px solid #2d784633;border-color:var(--p)}
+input[type=checkbox]{width:17px;height:17px;padding:0;accent-color:var(--p);vertical-align:middle}
+input[type=file]{padding:8px;background:var(--bg)}
+.btn,.ghost{border-radius:9px;padding:11px 18px;font-weight:700;font-size:15px;white-space:nowrap}
+.btn{background:var(--p);color:#fff;border:0}
+.btn:hover:not(:disabled){background:var(--p-dark)}
+.ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.ghost:hover:not(:disabled){border-color:var(--p);color:var(--p)}
+.linkbtn{background:none;border:0;color:var(--p);font-weight:700;padding:4px 0}
+.search{max-width:280px}
+
+/* 표 */
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{text-align:left;font-size:13px;font-weight:700;color:var(--muted);background:#f5f9f6;padding:10px 12px;border-bottom:1px solid var(--line);white-space:nowrap}
+td{padding:12px;border-bottom:1px solid #ebf1ed;vertical-align:middle}
+tbody tr:hover{background:#f8fbf9}
+td b{font-weight:700}
+.small{color:var(--muted);font-size:13px}
+.empty{padding:28px;text-align:center;color:var(--muted);background:#f8fbf9;border-radius:10px}
+.pager{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:14px;flex-wrap:wrap}
+.pager div{display:flex;gap:4px}
+.pager button{min-width:34px;height:34px;border:1px solid var(--line);background:#fff;border-radius:8px;font-weight:600}
+.pager button.on{background:var(--p);border-color:var(--p);color:#fff}
+
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:700;white-space:nowrap}
+.badge.gray{background:#eef1ef;color:#58585b}
+.badge.ok{background:var(--ok-bg);color:var(--ok)}
+.badge.warn{background:var(--warn-bg);color:var(--warn)}
+.badge.bad{background:var(--bad-bg);color:var(--bad)}
+.badge.info{background:var(--info-bg);color:var(--info)}
+.badge.p{background:var(--p-soft);color:var(--p)}
+
+/* 대시보드 */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+.stat .small{font-weight:600}
+.stat b{display:block;font-size:30px;font-weight:800;margin-top:4px;letter-spacing:-.02em}
+.flow{display:grid;gap:10px}
+.flow-item{display:grid;grid-template-columns:auto 170px 1fr auto;align-items:center;gap:18px;background:#fff;border:1px solid var(--line);border-radius:14px;padding:16px 22px;text-align:left}
+.flow-item:hover{border-color:var(--p)}
+.flow-item .num{width:38px;height:38px;border-radius:50%;background:var(--p);color:#fff;display:grid;place-items:center;font-weight:800}
+.flow-item b{font-size:16px;font-weight:800}
+.flow-item .desc{color:var(--muted)}
+
+.stepnav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+
+/* 로그인 */
+#auth{min-height:100vh;display:grid;place-items:center;padding:20px}
+.login{width:100%;max-width:420px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:34px 30px}
+.login h1{margin:14px 0 4px;font-size:26px;font-weight:800;letter-spacing:-.02em}
+.login form{display:grid;gap:12px;margin-top:20px}
+.login .btn{width:100%;padding:13px}
+.login .alt{text-align:center;margin-top:14px}
+
+.notice{padding:12px 14px;border-radius:10px;background:var(--ok-bg);color:var(--ok);font-weight:600;margin-top:12px}
+.notice.error{background:var(--bad-bg);color:var(--bad)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);max-width:calc(100% - 32px);background:var(--ink);color:#fff;padding:12px 20px;border-radius:12px;font-weight:600;box-shadow:0 8px 30px #0003;z-index:50}
+#toast.error{background:var(--bad)}
+
+@media(max-width:760px){
+  .topbar-in{height:auto;flex-wrap:wrap;gap:6px 14px;padding:10px 16px}
+  #nav{order:3;flex-basis:100%;margin:0 -6px}
+  .me{margin-left:auto}
+  .me span{display:none}
+  .wrap{padding:20px 16px 48px}
+  .head h1{font-size:21px}
+  .flow-item{grid-template-columns:auto 1fr auto;gap:12px;padding:14px 16px}
+  .flow-item .desc{display:none}
+  .stepnav{flex-direction:column-reverse}
+  .stepnav .btn,.stepnav .ghost{width:100%}
+  .search{max-width:none}
+}
+</style>
+</head>
+<body>
+<section id="auth">
+  <div class="login">
+    <span class="pill">관리자용</span>
+    <h1>투자전 지원사업 운영</h1>
+    <div class="small">농금원 워크플로우 · 승인된 사용자만 운영 정보를 조회할 수 있습니다.</div>
+    <div id="msg"></div>
+    <form id="login">
+      <label class="f"><span>이메일</span><input id="email" type="email" autocomplete="username" required></label>
+      <label class="f"><span>비밀번호</span><input id="password" type="password" autocomplete="current-password" minlength="8" required></label>
+      <button class="btn">로그인</button>
+    </form>
+    <div class="alt"><button id="signup" class="linkbtn" type="button">최초 계정 만들기</button></div>
+  </div>
+</section>
+
+<section id="app" class="hidden">
+  <header class="topbar">
+    <div class="topbar-in">
+      <div class="brand">농금원 투자전 지원사업<small id="role"></small></div>
+      <nav id="nav"></nav>
+      <div class="me"><span id="who"></span><button id="logout" type="button">로그아웃</button></div>
+    </div>
+  </header>
+  <main class="wrap" id="view"></main>
+</section>
+<div id="toast" class="hidden"></div>
+
+<script>
+const cfg={url:'https://akkasyywumvzgfrxdovd.supabase.co',key:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFra2FzeXl3dW12emdmcnhkb3ZkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMyMzc0ODUsImV4cCI6MjEwODgxMzQ4NX0.UU6gwccZJuxE9v8qDiFn1EbTNGC4fNjTeCsQ5id33QU'};
+const SKEY='nonggeum_session';
+let session=null,profile=null,data={},current='dash',lastStep='import',tables={},tpage={},refreshing=null;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const note=(s,e=false)=>$('#msg').innerHTML=s?'<div class="notice '+(e?'error':'')+'">'+esc(s)+'</div>':'';
+let toastTimer;
+function toast(s,e=false){const t=$('#toast');t.textContent=s;t.className=e?'error':'';clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.className='hidden',e?7000:3500)}
+
+/* ---------- 인증 ---------- */
+class AuthExpired extends Error{constructor(){super('로그인 시간이 지났습니다. 다시 로그인해 주세요.')}}
+function saveSession(s){if(s&&!s.expires_at&&s.expires_in)s.expires_at=Math.floor(Date.now()/1000)+Number(s.expires_in);session=s;localStorage.setItem(SKEY,JSON.stringify(s));return s}
+function clearSession(){session=null;profile=null;localStorage.removeItem(SKEY)}
+async function auth(path,b){
+  let r=await fetch(cfg.url+'/auth/v1/'+path,{method:'POST',headers:{apikey:cfg.key,'content-type':'application/json'},body:JSON.stringify(b)}),j=await r.json().catch(()=>({}));
+  if(!r.ok){let m=j.msg||j.error_description||j.message||'인증 오류';if(/invalid login credentials/i.test(m))m='이메일 또는 비밀번호가 맞지 않습니다.';if(/email not confirmed/i.test(m))m='이메일 인증이 아직 완료되지 않았습니다. 받은 메일의 링크를 눌러 주세요.';throw Error(m)}
+  return j}
+async function refreshSession(){
+  if(!session?.refresh_token)throw new AuthExpired();
+  refreshing=refreshing||auth('token?grant_type=refresh_token',{refresh_token:session.refresh_token}).then(saveSession).catch(()=>{throw new AuthExpired()}).finally(()=>refreshing=null);
+  return refreshing}
+async function accessToken(){if(!session?.access_token)throw new AuthExpired();if(session.expires_at&&Date.now()/1000>session.expires_at-60)await refreshSession();return session.access_token}
+async function authedFetch(url,o={},retry=true){
+  let r=await fetch(url,{...o,headers:{apikey:cfg.key,'content-type':'application/json',...(o.headers||{}),authorization:'Bearer '+await accessToken()}});
+  if(r.status===401&&retry){await refreshSession();return authedFetch(url,o,false)}
+  return r}
+async function api(path,o={}){
+  let r=await authedFetch(cfg.url+'/rest/v1/'+path,o);
+  if(!r.ok){let j=await r.json().catch(()=>({}));if(/jwt expired/i.test(j.message||''))throw new AuthExpired();throw Error(j.message||j.hint||'요청을 처리할 수 없습니다.')}
+  return r.status===204||r.headers.get('content-length')==='0'?null:r.json().catch(()=>null)}
+async function syncCompanies(companyIds){
+  let r=await authedFetch('/api/google-sheets-sync',{method:'POST',body:JSON.stringify({companyIds})}),j=await r.json().catch(()=>({}));
+  if(!r.ok)throw Error(j.message||'Google Sheets 동기화에 실패했습니다.');
+  return j}
+function showLogin(msg){clearSession();$('#app').classList.add('hidden');$('#auth').classList.remove('hidden');note(msg||'',!!msg)}
+function handleError(x){if(x instanceof AuthExpired){showLogin(x.message);return}toast(x.message||String(x),true)}
+
+/* ---------- 상태 표시 ---------- */
+const WF={intake:['접수','gray'],diagnostic_pending:['진단 대기','warn'],assignment_pending:['배정 대기','warn'],assigned:['배정 완료','ok'],consulting:['컨설팅','info'],ir_preparation:['IR 준비','info'],ir_completed:['IR 완료','ok']};
+const REPORT={missing:['미제출','warn'],submitted:['제출','info'],approved:['승인','ok']};
+const SETTLE={pending:['대기','warn'],confirmed:['확인','info'],paid:['지급 완료','ok']};
+const JOB={queued:['대기','warn'],running:['진행 중','info'],succeeded:['완료','ok'],failed:['실패','bad']};
+const AVAIL={available:['가능','ok'],busy:['바쁨','warn'],unavailable:['불가','bad']};
+const ASSIGN={assigned:['배정','ok']};
+const badge=(map,v)=>{const m=map[v]||[v||'-','gray'];return '<span class="badge '+m[1]+'">'+esc(m[0])+'</span>'};
+const cname=id=>(data.companies.find(c=>c.id===id)||{}).company_name||'-';
+const kname=id=>(data.consultants.find(c=>c.id===id)||{}).full_name||'-';
+const fld=(label,input)=>'<label class="f"><span>'+label+'</span>'+input+'</label>';
+const opts=(a,label)=>a.map(x=>'<option value="'+x.id+'">'+esc(label(x))+'</option>').join('');
+const companyOpts=()=>opts(data.companies,c=>c.company_name+(c.business_registration_number?' ('+c.business_registration_number+')':''));
+const consultantOpts=()=>opts(data.consultants,c=>c.full_name);
+const fmtDate=v=>v?new Date(v).toLocaleString('ko-KR',{dateStyle:'short',timeStyle:'short'}):'-';
+
+/* ---------- 페이지 구성 ---------- */
+const STEPS=[
+  {key:'import',label:'엑셀 업로드',title:'엑셀로 기업을 불러옵니다',desc:'원본 엑셀을 브라우저에서 읽고, 확정한 기업만 저장·시트 동기화합니다.',fn:importView},
+  {key:'companies',label:'기업 확인',title:'등록된 기업을 확인합니다',desc:'불러온 기업 정보를 확인하고, 빠진 기업은 직접 등록합니다.',fn:companies},
+  {key:'consultants',label:'컨설턴트 등록',title:'컨설턴트를 등록합니다',desc:'담당 권역과 전문 분야를 함께 등록합니다.',fn:consultants},
+  {key:'assign',label:'컨설턴트 배정',title:'기업에 컨설턴트를 배정합니다',desc:'배정 대기 중인 기업에 컨설턴트를 연결합니다.',fn:assignments},
+  {key:'rounds',label:'회차·보고',title:'컨설팅 회차와 보고서를 기록합니다',desc:'방문 회차별 일정과 보고서 제출 여부를 관리합니다.',fn:rounds},
+  {key:'settle',label:'정산',title:'컨설턴트 정산을 기록합니다',desc:'지급액과 보고 단가, 지급 상태를 관리합니다.',fn:settlements}];
+const EXTRA=[
+  {key:'dash',nav:'dash',label:'대시보드',title:'운영 현황을 한눈에 봅니다',fn:dash},
+  {key:'sheets',nav:'sheets',label:'시트 동기화',title:'Google Sheets 동기화',fn:sheets},
+  {key:'audit',nav:'audit',label:'감사 이력',title:'작업 이력을 확인합니다',fn:audit}];
+const stepCount=k=>({import:data.companies.length,companies:data.companies.length,consultants:data.consultants.length,assign:data.assignments.length,rounds:data.rounds.length,settle:data.settlements.length})[k]||0;
+
+function go(k){if(location.hash.slice(1)===k)render(k);else location.hash=k}
+async function render(k){
+  const s=[...STEPS,...EXTRA].find(x=>x.key===k)||EXTRA[0];
+  current=s.key;if(STEPS.includes(s))lastStep=s.key;
+  [...$('#nav').children].forEach(b=>b.classList.toggle('on',b.dataset.nav===(s.nav||'steps')));
+  try{await refresh();s.fn(s)}catch(x){if(x instanceof AuthExpired)return showLogin(x.message);$('#view').innerHTML='<div class="callout bad">'+esc(x.message)+'</div>'}}
+async function refresh(){
+  let [companies,consultants,assignments,rounds,settlements,jobs,audit]=await Promise.all([api('companies?select=*&order=created_at.desc'),api('consultants?select=*&order=full_name'),api('assignments?select=*&order=created_at.desc'),api('consulting_rounds?select=*&order=visit_date.desc'),api('settlements?select=*&order=created_at.desc'),api('google_sheet_sync_jobs?select=*&order=created_at.desc'),api('audit_logs?select=*&order=created_at.desc&limit=200')]);
+  data={...data,companies,consultants,assignments,rounds,settlements,jobs,audit}}
+
+function page(s,guide,body){
+  tables={};tpage={};
+  const i=STEPS.indexOf(s),isStep=i>=0;
+  $('#view').innerHTML=(isStep?stepper(i):'')+
+    '<div class="head"><span class="pill">'+(isStep?String(i+1).padStart(2,'0')+' ':'')+esc(s.label)+'</span><h1>'+esc(s.title)+'</h1></div>'+
+    (guide&&guide.length?'<ol class="guide">'+guide.map((g,k)=>'<li><span class="num">'+(k+1)+'</span><span>'+g+'</span></li>').join('')+'</ol>':'')+
+    body+(isStep?stepNav(i):'');
+  Object.keys(tables).forEach(drawTable);
+  window.scrollTo(0,0)}
+function stepper(i){return '<ol class="stepper">'+STEPS.map((x,k)=>{const done=k!==i&&stepCount(x.key)>0;return '<li class="'+(k===i?'on':done?'done':'')+'"><button type="button" data-go="'+x.key+'"><span class="num">'+(done?'✓':k+1)+'</span><span>'+x.label+'</span></button></li>'}).join('')+'</ol>'}
+function stepNav(i){const p=STEPS[i-1],n=STEPS[i+1];return '<div class="stepnav">'+(p?'<button class="ghost" type="button" data-go="'+p.key+'">← 이전 · '+p.label+'</button>':'<span></span>')+(n?'<button class="btn" type="button" data-go="'+n.key+'">다음 단계 · '+n.label+' →</button>':'<button class="btn" type="button" data-go="dash">대시보드로 돌아가기 →</button>')+'</div>'}
+
+/* 표 + 페이지 나누기 */
+function table(id,heads,rows,row,o={}){tables[id]={heads,rows,row,size:o.size||10,empty:o.empty||'아직 등록된 내용이 없습니다.'};return '<div id="tbl-'+id+'"></div>'}
+function drawTable(id){
+  const t=tables[id],el=$('#tbl-'+id);if(!t||!el)return;
+  const n=Math.max(1,Math.ceil(t.rows.length/t.size)),p=Math.min(tpage[id]||1,n),start=(p-1)*t.size;tpage[id]=p;
+  if(!t.rows.length){el.innerHTML='<div class="empty">'+t.empty+'</div>';return}
+  el.innerHTML='<div class="scroll"><table><thead><tr>'+t.heads.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+t.rows.slice(start,start+t.size).map((r,k)=>'<tr>'+t.row(r,start+k)+'</tr>').join('')+'</tbody></table></div>'+
+    (n>1?pagerHtml(id,p,n,t.rows.length):'<div class="pager"><span class="small">총 '+t.rows.length+'건</span></div>')}
+function pagerHtml(id,p,n,total){
+  let a=Math.max(1,Math.min(p-3,n-6)),b=Math.min(n,a+6),h='';
+  for(let i=a;i<=b;i++)h+='<button type="button" data-tp="'+id+'" data-p="'+i+'" class="'+(i===p?'on':'')+'">'+i+'</button>';
+  return '<div class="pager"><span class="small">총 '+total+'건 · '+p+' / '+n+'쪽</span><div><button type="button" data-tp="'+id+'" data-p="'+(p-1)+'"'+(p<=1?' disabled':'')+'>‹</button>'+h+'<button type="button" data-tp="'+id+'" data-p="'+(p+1)+'"'+(p>=n?' disabled':'')+'>›</button></div></div>'}
+
+function onSubmit(sel,fn){const f=$(sel);f.onsubmit=async e=>{e.preventDefault();const b=f.querySelector('button.btn');if(b)b.disabled=true;try{await fn(Object.fromEntries(new FormData(f)))}catch(x){handleError(x)}finally{if(b)b.disabled=false}}}
+
+/* ---------- 대시보드 ---------- */
+function dash(s){
+  const stat=(l,v)=>'<div class="stat"><span class="small">'+l+'</span><b>'+v+'</b></div>';
+  page(s,null,
+    '<div class="stats">'+stat('전체 기업',data.companies.length)+stat('배정 완료',data.assignments.filter(x=>x.status==='assigned').length)+stat('보고서 제출',data.rounds.filter(x=>x.report_status==='submitted'||x.report_status==='approved').length)+stat('정산 지급 완료',data.settlements.filter(x=>x.status==='paid').length)+'</div>'+
+    '<h2 class="sec">전체 흐름 한눈에 보기</h2><div class="flow">'+STEPS.map((x,i)=>'<button type="button" class="flow-item" data-go="'+x.key+'"><span class="num">'+(i+1)+'</span><b>'+x.label+'</b><span class="desc">'+x.desc+'</span><span class="badge '+(stepCount(x.key)?'p':'gray')+'">'+stepCount(x.key)+'건</span></button>').join('')+'</div>'+
+    '<h2 class="sec">운영 원칙</h2><div class="callout">원본 엑셀·IR 파일은 브라우저 밖으로 전송하거나 보관하지 않습니다. 엑셀은 이 브라우저에서 읽고, 관리자가 확정한 기업 정보만 저장한 뒤 Google Sheets에 반영합니다.</div>')}
+
+/* ---------- 1. 엑셀 업로드 ---------- */
+function normHeader(v){return String(v||'').replace(/[\s_()\-·]/g,'').toLowerCase()}
+function importValue(row,patterns){for(const [key,value] of Object.entries(row)){let h=normHeader(key);if(patterns.some(p=>p.test(h))&&value!==null&&value!==undefined&&String(value).trim()!=='')return String(value).trim()}return ''}
+function importAddress(row){let values=[];for(const [key,value] of Object.entries(row)){let h=normHeader(key);if(/(상세주소|기본주소|도로명주소|지번주소|사업장주소|경영체주소|소재지|주소)/.test(h)&&!/우편|zipcode|zip/.test(h)&&value!==null&&value!==undefined&&String(value).trim()!=='')values.push(String(value).trim())}return [...new Set(values)].join(' ')}
+function mapImportRow(r,i){return{row:i+2,company_name:importValue(r,[/^경영체명$/,/^기업명$/,/^회사명$/,/^상호명$/,/경영체.*명/,/기업.*명/,/회사.*명/]),business_registration_number:importValue(r,[/사업자.*등록/,/사업자.*번호/]),confirmed_address:importAddress(r),category_major:importValue(r,[/^대구분$/,/^분야$/,/대.*분류/,/^업종$/])}}
+async function readWorkbook(f,pass){
+  if(!window.XLSX)throw Error('엑셀 파서를 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 새로고침하세요.');
+  if(pass&&/\.xlsx$/i.test(f.name)){
+    if(!window.XlsxPopulate)throw Error('암호 해독 모듈을 불러오지 못했습니다. 인터넷 연결을 확인한 뒤 새로고침하세요.');
+    let book=await XlsxPopulate.fromDataAsync(await f.arrayBuffer(),{password:pass}),used=book.sheet(0).usedRange(),aoa=used?used.value():[];
+    let headers=(aoa.shift()||[]).map((x,i)=>String(x||('열'+(i+1))).trim());
+    return aoa.filter(r=>r.some(x=>x!==null&&x!==undefined&&String(x).trim()!=='')).map(r=>Object.fromEntries(headers.map((h,i)=>[h,r[i]??''])))}
+  let wb=XLSX.read(await f.arrayBuffer(),{type:'array',password:pass||undefined});
+  return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:''})}
+function importView(s){
+  page(s,['.xlsx·.xls·.csv 파일을 고릅니다. 암호가 걸린 파일이면 비밀번호도 입력합니다.','「미리보기」를 누릅니다. 파일은 이 브라우저 안에서만 읽고 서버로 보내지 않습니다.','저장할 기업을 체크한 뒤 「선택 기업 저장 및 시트 동기화」를 누릅니다.'],
+    '<div class="card"><h2>파일 선택</h2><div class="form">'+fld('엑셀 파일','<input id="file" type="file" accept=".xlsx,.xls,.csv">')+fld('파일 비밀번호 (암호 파일만)','<input id="excelPassword" type="password" autocomplete="off">')+'<button id="parse" class="btn" type="button">미리보기</button></div></div><div id="preview"></div>');
+  if(data.import)drawPreview();
+  $('#parse').onclick=async()=>{
+    const btn=$('#parse');btn.disabled=true;
+    try{
+      let f=$('#file').files[0];if(!f)throw Error('파일을 먼저 선택하세요.');
+      let rows=await readWorkbook(f,$('#excelPassword').value);
+      if(!rows.length)throw Error('첫 시트에서 읽을 데이터가 없습니다.');
+      data.import=rows.map(mapImportRow);data.importName=f.name;
+      data.picked=new Set(data.import.map((r,i)=>r.company_name?i:-1).filter(i=>i>=0));
+      drawPreview()
+    }catch(e){let msg=String(e.message||e);if(/password|encrypt|decrypt/i.test(msg))msg='비밀번호가 맞지 않거나 지원하지 않는 암호화 형식입니다. 비밀번호를 다시 입력해 보세요.';$('#preview').innerHTML='<div class="callout bad">'+esc(msg)+'</div>'}
+    finally{btn.disabled=false;let p=$('#excelPassword');if(p)p.value=''}}}
+function drawPreview(){
+  const rows=data.import,valid=rows.filter(r=>r.company_name).length;
+  $('#preview').innerHTML='<div class="card"><div class="card-head"><h2>미리보기 <span class="small">'+esc(data.importName||'')+' · '+rows.length+'행</span></h2><label class="small"><input type="checkbox" id="pickAll"> 전체 선택 (<span id="pickCount"></span>)</label></div>'+
+    table('import',['선택','행','기업명','사업자번호','주소','대구분'],rows,(r,i)=>'<td><input type="checkbox" data-i="'+i+'"'+(data.picked.has(i)?' checked':'')+(r.company_name?'':' disabled')+'></td><td class="small">'+r.row+'</td><td>'+(r.company_name?'<b>'+esc(r.company_name)+'</b>':'<span class="badge bad">기업명 없음</span>')+'</td><td>'+esc(r.business_registration_number||'-')+'</td><td>'+esc(r.confirmed_address||'-')+'</td><td>'+esc(r.category_major||'-')+'</td>',{size:15})+
+    '<div class="stepnav"><span class="small">기업명이 없는 행은 저장되지 않습니다.</span><button id="commit" class="btn" type="button">선택 기업 저장 및 시트 동기화</button></div></div>';
+  drawTable('import');
+  const sync=()=>{$('#pickCount').textContent=data.picked.size+' / '+valid+'건';$('#pickAll').checked=valid>0&&data.picked.size===valid};sync();
+  $('#preview').onchange=e=>{const t=e.target;if(t.id==='pickAll'){data.picked=new Set(t.checked?rows.map((r,i)=>r.company_name?i:-1).filter(i=>i>=0):[]);drawTable('import')}else if(t.dataset.i!=null){t.checked?data.picked.add(+t.dataset.i):data.picked.delete(+t.dataset.i)}sync()};
+  $('#commit').onclick=async()=>{
+    const btn=$('#commit');btn.disabled=true;
+    try{
+      let picks=[...data.picked].sort((a,b)=>a-b).map(i=>rows[i]).filter(x=>x.company_name);
+      if(!picks.length)throw Error('저장할 기업을 선택하세요.');
+      let payload=picks.map(x=>({company_name:x.company_name,business_registration_number:x.business_registration_number,confirmed_address:x.confirmed_address,category_major:x.category_major,workflow_status:'intake'}));
+      let saved=await api('companies',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(payload)});
+      try{
+        let sync=await syncCompanies(saved.map(x=>x.id));
+        await Promise.all(saved.map(x=>api('google_sheet_sync_jobs',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({company_id:x.id,status:'succeeded',sync_action:'upsert',target_sheet_name:sync.sheet,attempt_count:1})})));
+        await auditLog('엑셀 확정 기업 저장 및 Google Sheets 동기화',String(saved.length)+'건');
+        data.import=null;
+        toast('저장·시트 동기화 완료 · 신규 '+sync.created+'건, 갱신 '+sync.updated+'건');
+        go('companies')
+      }catch(e){
+        if(e instanceof AuthExpired)throw e;
+        await auditLog('엑셀 확정 기업 저장',String(saved.length)+'건').catch(()=>{});
+        data.import=null;
+        toast('기업 '+saved.length+'건은 저장됐지만 Google Sheets 동기화에 실패했습니다. 「시트 동기화」에서 다시 시도해 주세요. ('+e.message+')',true);
+        go('companies')}
+    }catch(x){handleError(x)}finally{btn.disabled=false}}}
+
+/* ---------- 2. 기업 확인 ---------- */
+function companies(s){
+  page(s,['목록에서 기업명·사업자번호·주소가 맞는지 확인합니다.','엑셀에 없던 기업은 아래 「기업 직접 등록」에서 추가합니다.'],
+    '<div class="card"><div class="card-head"><h2>기업 목록</h2><input id="q" class="search" placeholder="기업명·사업자번호 검색"></div>'+
+    table('companies',['기업','상태','주소','분류'],data.companies,c=>'<td><b>'+esc(c.company_name)+'</b><br><span class="small">'+esc(c.business_registration_number||'번호 미입력')+'</span></td><td>'+badge(WF,c.workflow_status)+'</td><td>'+(c.confirmed_address?esc(c.confirmed_address):'<span class="badge warn">확인 필요</span>')+'</td><td>'+esc([c.category_major,c.category_minor].filter(Boolean).join(' · ')||'-')+'</td>',{empty:'아직 등록된 기업이 없습니다. 1단계 「엑셀 업로드」에서 불러오세요.'})+'</div>'+
+    '<div class="card"><h2>기업 직접 등록</h2><form id="companyForm" class="form">'+fld('기업명 *','<input name="company_name" required>')+fld('사업자등록번호','<input name="business_registration_number">')+fld('확정 주소','<input name="confirmed_address">')+fld('대구분','<input name="category_major">')+fld('소구분','<input name="category_minor">')+fld('진행 상태','<select name="workflow_status">'+Object.entries(WF).map(([k,v])=>'<option value="'+k+'">'+v[0]+'</option>').join('')+'</select>')+'<button class="btn">등록</button></form></div>');
+  $('#q').oninput=e=>{const q=e.target.value.trim().toLowerCase().replace(/-/g,'');tables.companies.rows=data.companies.filter(c=>!q||String(c.company_name||'').toLowerCase().includes(q)||String(c.business_registration_number||'').replace(/-/g,'').includes(q));tpage.companies=1;drawTable('companies')};
+  onSubmit('#companyForm',async b=>{await api('companies',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});await auditLog('기업 등록',b.company_name);toast('기업을 등록했습니다.');render(current)})}
+
+/* ---------- 3. 컨설턴트 등록 ---------- */
+function consultants(s){
+  page(s,['성명과 연락처를 입력합니다.','담당 권역과 전문 분야는 쉼표(,)로 구분해 여러 개 입력할 수 있습니다.'],
+    '<div class="card"><h2>컨설턴트 등록</h2><form id="consultForm" class="form">'+fld('성명 *','<input name="full_name" required>')+fld('이메일','<input name="email" type="email">')+fld('연락처','<input name="phone">')+fld('담당 권역','<input name="activity_regions" placeholder="예: 경북, 강원">')+fld('전문 분야','<input name="specializations" placeholder="예: 식품, 유통">')+'<button class="btn">등록</button></form></div>'+
+    '<div class="card"><h2>컨설턴트 목록</h2>'+table('consultants',['이름','연락처','권역','전문분야','상태'],data.consultants,c=>'<td><b>'+esc(c.full_name)+'</b></td><td class="small">'+esc([c.email,c.phone].filter(Boolean).join(' · ')||'-')+'</td><td>'+esc((c.activity_regions||[]).join(', ')||'-')+'</td><td>'+esc((c.specializations||[]).join(', ')||'-')+'</td><td>'+badge(AVAIL,c.availability_status)+'</td>',{empty:'아직 등록된 컨설턴트가 없습니다.'})+'</div>');
+  onSubmit('#consultForm',async b=>{
+    b.activity_regions=b.activity_regions?b.activity_regions.split(',').map(x=>x.trim()).filter(Boolean):[];
+    b.specializations=b.specializations?b.specializations.split(',').map(x=>x.trim()).filter(Boolean):[];
+    await api('consultants',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});await auditLog('컨설턴트 등록',b.full_name);toast('컨설턴트를 등록했습니다.');render(current)})}
+
+/* ---------- 4. 컨설턴트 배정 ---------- */
+function assignments(s){
+  const assigned=new Set(data.assignments.filter(a=>a.is_current!==false).map(a=>a.company_id));
+  const waiting=data.companies.filter(c=>!assigned.has(c.id));
+  const ordered=[...waiting,...data.companies.filter(c=>assigned.has(c.id))];
+  page(s,['배정할 기업과 컨설턴트를 고릅니다. 아직 배정되지 않은 기업이 목록 위쪽에 나옵니다.','「배정 확정」을 누르면 기업 상태가 「배정 완료」로 바뀝니다.'],
+    (waiting.length?'<div class="callout warn">배정 대기 기업이 <b>'+waiting.length+'곳</b> 남아 있습니다.</div>':data.companies.length?'<div class="callout">모든 기업에 컨설턴트가 배정되었습니다.</div>':'')+
+    (data.consultants.length?'':'<div class="callout bad">등록된 컨설턴트가 없습니다. 3단계 「컨설턴트 등록」을 먼저 진행하세요.</div>')+
+    '<div class="card"><h2>배정하기</h2><form id="assignForm" class="form">'+fld('기업','<select name="company_id" required>'+opts(ordered,c=>(assigned.has(c.id)?'':'[대기] ')+c.company_name)+'</select>')+fld('컨설턴트','<select name="consultant_id" required>'+consultantOpts()+'</select>')+fld('배정 메모','<input name="admin_notes">')+'<button class="btn">배정 확정</button></form></div>'+
+    '<div class="card"><h2>배정 현황</h2>'+table('assign',['기업','컨설턴트','상태','메모','배정일'],data.assignments,a=>'<td><b>'+esc(cname(a.company_id))+'</b></td><td>'+esc(kname(a.consultant_id))+'</td><td>'+badge(ASSIGN,a.status)+'</td><td class="small">'+esc(a.admin_notes||'-')+'</td><td class="small">'+fmtDate(a.created_at)+'</td>',{empty:'아직 배정 내역이 없습니다.'})+'</div>');
+  onSubmit('#assignForm',async b=>{
+    await api('assignments',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({...b,status:'assigned',is_current:true,recommended_by:'manual'})});
+    await api('companies?id=eq.'+b.company_id,{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({workflow_status:'assigned'})});
+    await auditLog('컨설턴트 배정',b.company_id);toast(cname(b.company_id)+' 배정을 확정했습니다.');render(current)})}
+
+/* ---------- 5. 회차·보고 ---------- */
+function rounds(s){
+  page(s,['기업과 담당 컨설턴트, 회차와 방문일을 입력합니다.','보고서 상태를 고르고 「회차 저장」을 누릅니다.'],
+    '<div class="card"><h2>회차 기록</h2><form id="roundForm" class="form">'+fld('기업','<select name="company_id" required>'+companyOpts()+'</select>')+fld('컨설턴트','<select name="consultant_id"><option value="">미지정</option>'+consultantOpts()+'</select>')+fld('회차 *','<input name="round_number" type="number" min="1" required>')+fld('방문일','<input name="visit_date" type="date">')+fld('보고서','<select name="report_status">'+Object.entries(REPORT).map(([k,v])=>'<option value="'+k+'">'+v[0]+'</option>').join('')+'</select>')+fld('메모','<input name="notes">')+'<button class="btn">회차 저장</button></form></div>'+
+    '<div class="card"><h2>회차 현황</h2>'+table('rounds',['기업','컨설턴트','회차','방문일','보고서'],data.rounds,r=>'<td><b>'+esc(cname(r.company_id))+'</b></td><td>'+esc(r.consultant_id?kname(r.consultant_id):'-')+'</td><td>'+esc(r.round_number)+'회차</td><td>'+esc(r.visit_date||'-')+'</td><td>'+badge(REPORT,r.report_status)+'</td>',{empty:'아직 기록된 회차가 없습니다.'})+'</div>');
+  onSubmit('#roundForm',async b=>{if(!b.consultant_id)delete b.consultant_id;if(!b.visit_date)delete b.visit_date;await api('consulting_rounds',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});await auditLog('컨설팅 회차 저장',b.company_id);toast('회차를 저장했습니다.');render(current)})}
+
+/* ---------- 6. 정산 ---------- */
+function settlements(s){
+  page(s,['기업과 컨설턴트를 고르고 지급액과 보고 단가를 입력합니다.','지급 상태를 고른 뒤 「정산 저장」을 누릅니다.'],
+    '<div class="card"><h2>정산 기록</h2><form id="settleForm" class="form">'+fld('기업','<select name="company_id" required>'+companyOpts()+'</select>')+fld('컨설턴트','<select name="consultant_id"><option value="">미지정</option>'+consultantOpts()+'</select>')+fld('컨설턴트 지급액 (원)','<input name="consultant_fee" type="number" min="0" value="0">')+fld('보고 단가 (원)','<input name="report_fee" type="number" min="0" value="0">')+fld('상태','<select name="status">'+Object.entries(SETTLE).map(([k,v])=>'<option value="'+k+'">'+v[0]+'</option>').join('')+'</select>')+'<button class="btn">정산 저장</button></form></div>'+
+    '<div class="card"><h2>정산 현황</h2>'+table('settle',['기업','컨설턴트','지급액','보고 단가','상태'],data.settlements,x=>'<td><b>'+esc(cname(x.company_id))+'</b></td><td>'+esc(x.consultant_id?kname(x.consultant_id):'-')+'</td><td>'+Number(x.consultant_fee||0).toLocaleString()+'원</td><td>'+Number(x.report_fee||0).toLocaleString()+'원</td><td>'+badge(SETTLE,x.status)+'</td>',{empty:'아직 정산 기록이 없습니다.'})+'</div>');
+  onSubmit('#settleForm',async b=>{if(!b.consultant_id)delete b.consultant_id;await api('settlements',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify(b)});await auditLog('정산 저장',b.company_id);toast('정산을 저장했습니다.');render(current)})}
+
+/* ---------- 시트 동기화 ---------- */
+function sheets(s){
+  page(s,['엑셀 업로드에서 저장한 기업은 자동으로 시트에 반영됩니다.','동기화가 실패했거나 기업 정보를 고친 경우, 기업을 골라 「지금 동기화」를 누릅니다.'],
+    '<div class="card"><h2>기업 다시 동기화</h2><form id="syncForm" class="form">'+fld('기업','<select name="company_id" required>'+companyOpts()+'</select>')+'<button class="btn">지금 동기화</button></form></div>'+
+    '<div class="card"><h2>동기화 기록</h2>'+table('jobs',['기업','상태','시도','대상 시트','일시'],data.jobs,j=>'<td><b>'+esc(cname(j.company_id))+'</b></td><td>'+badge(JOB,j.status)+'</td><td>'+esc(j.attempt_count??'-')+'</td><td>'+esc(j.target_sheet_name||'-')+'</td><td class="small">'+fmtDate(j.created_at)+'</td>',{empty:'아직 동기화 기록이 없습니다.'})+'</div>');
+  onSubmit('#syncForm',async b=>{
+    let r=await syncCompanies([b.company_id]);
+    await api('google_sheet_sync_jobs',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({company_id:b.company_id,status:'succeeded',sync_action:'upsert',target_sheet_name:r.sheet,attempt_count:1})});
+    await auditLog('Google Sheets 동기화',b.company_id);
+    toast(cname(b.company_id)+' 동기화 완료 ('+(r.created?'신규 추가':'기존 행 갱신')+')');render(current)})}
+
+/* ---------- 감사 이력 ---------- */
+function audit(s){
+  page(s,null,'<div class="card">'+table('audit',['일시','작업','대상'],data.audit,a=>'<td class="small">'+fmtDate(a.created_at)+'</td><td><b>'+esc(a.action)+'</b></td><td class="small">'+esc(data.companies.find(c=>c.id===a.entity_id)?.company_name||a.entity_id||a.entity_type||'-')+'</td>',{size:15,empty:'아직 기록된 작업이 없습니다.'})+'</div>')}
+async function auditLog(action,entity_id){await api('audit_logs',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({actor_user_id:session.user.id,actor_type:'admin',action,entity_type:'workflow',entity_id:entity_id||null})})}
+
+/* ---------- 시작 ---------- */
+async function load(){
+  profile=(await api('profiles?select=email,role&id=eq.'+session.user.id))[0];
+  if(!profile)throw Error('권한 프로필을 찾을 수 없습니다. 관리자에게 계정 승인을 요청하세요.');
+  note('');
+  $('#auth').classList.add('hidden');$('#app').classList.remove('hidden');
+  $('#who').textContent=profile.email;$('#role').textContent=profile.role==='admin'?'관리자':'컨설턴트';
+  $('#nav').innerHTML='<button type="button" data-nav="dash" data-go="dash">대시보드</button><button type="button" data-nav="steps" id="navSteps">진행 단계</button><button type="button" data-nav="sheets" data-go="sheets">시트 동기화</button><button type="button" data-nav="audit" data-go="audit">감사 이력</button>';
+  $('#navSteps').onclick=()=>go(lastStep);
+  await render(location.hash.slice(1)||'dash')}
+
+document.addEventListener('click',e=>{
+  const tp=e.target.closest('[data-tp]');if(tp){if(!tp.disabled){tpage[tp.dataset.tp]=+tp.dataset.p;drawTable(tp.dataset.tp)}return}
+  const g=e.target.closest('[data-go]');if(g)go(g.dataset.go)});
+window.addEventListener('hashchange',()=>{if(profile)render(location.hash.slice(1))});
+$('#login').onsubmit=async e=>{e.preventDefault();const b=e.target.querySelector('button');b.disabled=true;
+  try{saveSession(await auth('token?grant_type=password',{email:$('#email').value,password:$('#password').value}));await load()}
+  catch(x){note(x.message,true)}finally{b.disabled=false}};
+$('#signup').onclick=async()=>{try{if(!$('#email').value||$('#password').value.length<8)throw Error('이메일과 8자 이상 비밀번호를 먼저 입력하세요.');await auth('signup',{email:$('#email').value,password:$('#password').value,email_redirect_to:location.origin});note('확인 메일을 보냈습니다. 메일의 링크를 누른 뒤 로그인하세요.')}catch(x){note(x.message,true)}};
+$('#logout').onclick=()=>{clearSession();location.hash='';location.reload()};
+(async()=>{
+  try{
+    let h=new URLSearchParams(location.hash.slice(1));
+    if(h.get('access_token')){
+      let t=h.get('access_token'),r=await fetch(cfg.url+'/auth/v1/user',{headers:{apikey:cfg.key,authorization:'Bearer '+t}});
+      saveSession({access_token:t,refresh_token:h.get('refresh_token'),expires_at:Number(h.get('expires_at'))||undefined,expires_in:h.get('expires_in'),user:await r.json()});
+      history.replaceState({},'',location.pathname)
+    }else session=JSON.parse(localStorage.getItem(SKEY)||'null');
+    if(session?.access_token)await load()
+  }catch(e){if(e instanceof AuthExpired)showLogin(e.message);else note(e.message,true)}})();
+</script>
+</body>
+</html>
